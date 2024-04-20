@@ -1,6 +1,7 @@
 ---
 queries:
-  - everything: happiness/hs2024.sql
+  - hs2024: happiness/hs2024.sql
+  - yearly_scores: happiness/getYearlyScores.sql
 ---
 
 ```sql getComparison
@@ -10,19 +11,28 @@ SELECT country,
        ebSocialSupport        AS "Social Support",
        ebLifeExpectancy       AS "Life Expectancy",
        ebFreedomOfLifeChoices AS "Freedom Of Life Choices",
-       ebGenerosity           AS "Generosity",
-FROM   ${everything}
-WHERE  country IN ('${inputs.home.value}',
-                   '${inputs.away.value}')
+       ebGenerosity           AS "Generosity"
+FROM   ${hs2024}
+WHERE  country IN ('${inputs.home.value}','${inputs.away.value}')
+```
+
+```sql getHistory
+SELECT a.country,
+       a.score,
+       (a.score - b.score) AS change
+FROM   happiness_score.hs2024 a
+JOIN   happiness_score.hsArchive b
+ON     a.country = b.country
+WHERE  a.country IN ('${inputs.home.value}','${inputs.away.value}') AND b.scoreYear=2023
 ```
 
 ## Select two countries to compare their happiness scores
 
 <center>
-<Dropdown data={everything} name=home value=country order=country defaultValue="Afghanistan">
+<Dropdown data={hs2024} name=home value=country order=country defaultValue="Argentina">
 <DropdownOption valueLabel="Select A Country" value="" />
 </Dropdown>
-<Dropdown data={everything} name=away value=country order=country defaultValue="Algeria">
+<Dropdown data={hs2024} name=away value=country order=country defaultValue="Hungary">
 <DropdownOption valueLabel="Select A Country" value="" />
 </Dropdown>
 </center>
@@ -32,15 +42,19 @@ WHERE  country IN ('${inputs.home.value}',
 <center>
 
 <BigValue
-data={getComparison[0]}
+data={getHistory[0]}
 value=score
+comparison=change
 title={inputs.home.value + " Happiness Score"}
+comparisonTitle="from 2023"
 />
 
 <BigValue
-data={getComparison[1]}
+data={getHistory[1]}
 value=score
+comparison=change
 title={inputs.away.value + " Happiness Score"}
+comparisonTitle="from 2023"
 />
 
 </center>

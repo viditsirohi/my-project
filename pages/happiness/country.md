@@ -39,7 +39,7 @@ SELECT scoreYear from ${hs_archive} WHERE country='${inputs.country.value}' AND 
 
 Select a country to begin: <Dropdown data={hs2024} name=country value=country order=country> <DropdownOption valueLabel="Select A Country" value="" /></Dropdown>
 
-{#if inputs.home.value != "" && inputs.away.value != ""}
+{#if inputs.country.value != ""}
 
 <center>
 <BigValue
@@ -114,6 +114,7 @@ labels=true>
 
 ### Select a factor to see its trend: <Dropdown name=factor><DropdownOption value="gdpPerCapita" valueLabel="GDP per capita"/> <DropdownOption value="socialSupport" valueLabel="Social Support"/> <DropdownOption value="healtyLifeExpectancyAtBirth" valueLabel="Life Expectancy"/> <DropdownOption value="freedomToMakeLifeChoices" valueLabel="Freedom Of Life Choices"/> <DropdownOption value="generosity" valueLabel="Generosity"/> <DropdownOption value="perceptionsOfCurrotpion" valueLabel="Corruption"/> </Dropdown>
 
+{#if inputs.factor.value != ""}
 <LineChart
 data={hs_archive_country}
 x=scoreYear
@@ -128,5 +129,5 @@ markerShape=emptyCircle
 labels=true>
 <ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
 </LineChart>
-
+{/if}
 {/if}

@@ -114,6 +114,15 @@ sort=false>
 <ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
 </LineChart>
 
+### Regional Composition of Happiness Score Categories
+
+| Category  | score range |
+| --------- | ----------- |
+| Unhappy   | 0-3         |
+| Neutral   | 3-5         |
+| Satisfied | 5-7         |
+| Happy     | 7-10        |
+
 <BarChart
 data={regionalcategorycount}
 series=region

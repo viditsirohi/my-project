@@ -31,7 +31,7 @@ WHERE     year(b.scoreyear)=2023
 AND       b.country IN ('${inputs.country.value}')
 ```
 
-```sql happies_year
+```sql happiness_year
 SELECT scoreYear from ${hs_archive} WHERE country='${inputs.country.value}' AND score = (SELECT MAX(score) FROM ${hs_archive} WHERE country='${inputs.country.value}')
 ```
 
@@ -43,15 +43,21 @@ Select a country to begin: <Dropdown data={hs2024} name=country value=country or
 
 <center>
 <BigValue
+data={get_country}
+title="Rank"
+value=rank
+/>
+
+<BigValue
 title={inputs.country.value + " Happiness Score"}
 data={get_country}
-value=score 
+value=score
 comparison=deltascore
 comparisonFmt=pct1
 comparisonTitle="from 2023"/>
 
 <BigValue
-data={happies_year}
+data={happiness_year}
 title={"Happiest year for " + inputs.country.value}
 value=scoreYear
 fmt=yyyy

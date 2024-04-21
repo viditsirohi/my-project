@@ -71,9 +71,9 @@ ORDER BY
     scoreYear
 ```
 
-# World Happiness stats
+# Overview
 
-## World average of 2024 is <Value data={avg2024} row=0 column=avg fmt=number precision=2/>
+## World Happiness average of 2024 is <Value data={avg2024} row=0 column=avg fmt=number precision=2/>
 
 <center>
 
@@ -95,7 +95,7 @@ ORDER BY
 
 </center>
 
-# Happiness Score Trend
+## Average Happiness Score Trend
 
 <LineChart
 data={yearlyAvgTrend}
@@ -114,7 +114,7 @@ sort=false>
 <ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
 </LineChart>
 
-### Regional Composition of Happiness Score Categories
+## Regional Composition of Happiness Score Categories
 
 | Category  | score range |
 | --------- | ----------- |
@@ -128,14 +128,13 @@ data={regionalcategorycount}
 series=region
 x=category
 y=count
-title="Regional Composition of Happiness Score Categories"
 swapXY=true
 labels=true
 yGridlines=false
 yAxisLabels=false
 />
 
-### Select a factor to see its trend against happiness score:
+## Factor vs Happiness Score
 
 <Grid cols=2>
 <center>
@@ -183,7 +182,7 @@ yAxisTitle={inputs.factor2.label}
 </Grid>
 {/if}
 
-### Select two factors to see their correlation:
+## Correlation between Factors
 
 <Grid cols=2>
 <center>

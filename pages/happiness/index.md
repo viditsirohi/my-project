@@ -113,19 +113,20 @@ labels=true
 sort=false
 />
 
-<Heatmap
+<BarChart
 data={regionalcategorycount}
+series=region
 x=category
-y=region
-value=count
-title="Happiness Score Categories by Region"
-colorPalette={['white', 'green']}
+y=count
+title="Regional Composition of Happiness Score Categories"
+swapXY=true
 />
 
 ### Select a factor to see its trend against happiness score:
 
 <Grid cols=2>
 <Dropdown name=factor>
+<DropdownOption value="" valueLabel="Select a factor"/>
 <DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
 <DropdownOption value="ebSocialSupport" valueLabel="Social Support"/> 
 <DropdownOption value="ebLifeExpectancy" valueLabel="Life Expectancy"/> 
@@ -134,6 +135,7 @@ colorPalette={['white', 'green']}
 <DropdownOption value="ebCorruption" valueLabel="Corruption"/> 
 </Dropdown>
 <Dropdown name=factor2>
+<DropdownOption value="" valueLabel="Select a factor"/>
 <DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
 <DropdownOption value="ebSocialSupport" valueLabel="Social Support"/> 
 <DropdownOption value="ebLifeExpectancy" valueLabel="Life Expectancy"/> 
@@ -142,6 +144,10 @@ colorPalette={['white', 'green']}
 <DropdownOption value="ebCorruption" valueLabel="Corruption"/> 
 </Dropdown>
 
+</Grid>
+
+{#if inputs.factor.value != "" }
+<Grid cols=2>
 <ScatterPlot
 data={hs2024}
 y={inputs.factor.value}
@@ -150,6 +156,7 @@ xAxisTitle="Happiness Score"
 yAxisTitle="Factor"
 />
 
+{#if inputs.factor2.value != "" }
 <ScatterPlot
 data={hs2024}
 y={inputs.factor2.value}
@@ -157,4 +164,7 @@ x=score
 xAxisTitle="Happiness Score"
 yAxisTitle="Factor"
 />
+{/if}
+
 </Grid>
+{/if}

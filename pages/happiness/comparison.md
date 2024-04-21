@@ -11,7 +11,9 @@ SELECT country,
        ebSocialSupport        AS "Social Support",
        ebLifeExpectancy       AS "Life Expectancy",
        ebFreedomOfLifeChoices AS "Freedom Of Life Choices",
-       ebGenerosity           AS "Generosity"
+       ebGenerosity           AS "Generosity",
+        ebCorruption           AS "Corruption",
+        dystopiaResidual       AS "Dystopia Residual"
 FROM   ${hs2024}
 WHERE  country IN ('${inputs.home.value}','${inputs.away.value}')
 ```
@@ -19,11 +21,14 @@ WHERE  country IN ('${inputs.home.value}','${inputs.away.value}')
 ```sql getHistory
 SELECT a.country,
        a.score,
-       (a.score - b.score) AS change
+       CASE
+                    WHEN b.score IS NULL THEN 0
+                    ELSE ((a.score - b.score) / b.score)
+       END AS change
 FROM   happiness_score.hs2024 a
-JOIN   happiness_score.hsArchive b
+LEFT JOIN   happiness_score.hsArchive b
 ON     a.country = b.country
-WHERE  a.country IN ('${inputs.home.value}','${inputs.away.value}') AND b.scoreYear=2023
+WHERE  a.country IN ('${inputs.home.value}','${inputs.away.value}') AND year(b.scoreyear)=2023
 ```
 
 ## Select two countries to compare their happiness scores
@@ -43,6 +48,7 @@ WHERE  a.country IN ('${inputs.home.value}','${inputs.away.value}') AND b.scoreY
 
 <BigValue
 data={getHistory[0]}
+comparisonFmt=pct1
 value=score
 comparison=change
 title={inputs.home.value + " Happiness Score"}
@@ -52,8 +58,9 @@ comparisonTitle="from 2023"
 <BigValue
 data={getHistory[1]}
 value=score
-comparison=change
 title={inputs.away.value + " Happiness Score"}
+comparison=change
+comparisonFmt=pct1
 comparisonTitle="from 2023"
 />
 
@@ -62,7 +69,12 @@ comparisonTitle="from 2023"
 <BarChart
 data={getComparison}
 x=country
-y={["GDP", "Social Support", "Life Expectancy", "Freedom Of Life Choices", "Generosity"]}
-swapXY=true/>
+y={["GDP", "Social Support", "Life Expectancy", "Freedom Of Life Choices", "Generosity", "Corruption", "Dystopia Residual"]}
+swapXY=true
+labels=true
+yGridlines=false
+yAxisLabels=false
+yMin=0
+/>
 
 {/if}

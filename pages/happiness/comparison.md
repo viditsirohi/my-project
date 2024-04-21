@@ -95,7 +95,6 @@ yMin=0
 <DropdownOption value="perceptionsOfCurrotpion" valueLabel="Corruption"/>
 </Dropdown>
 </center>
-<Grid cols=2>
 
 <LineChart
 data={getHomeHistory}
@@ -128,6 +127,5 @@ labels=true
 title = {inputs.away.value + " - " + inputs.factor.label}>
 <ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
 </LineChart>
-</Grid>
 
 {/if}

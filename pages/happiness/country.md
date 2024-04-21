@@ -37,7 +37,7 @@ SELECT scoreYear from ${hs_archive} WHERE country='${inputs.country.value}' AND 
 
 # Coutnry-wise happiness
 
-Select a country to begin: <Dropdown data={hs2024} name=country value=country order=country defaultValue="France"> <DropdownOption valueLabel="Select A Country" value="" /></Dropdown>
+Select a country to begin: <Dropdown data={hs2024} name=country value=country order=country> <DropdownOption valueLabel="Select A Country" value="" /></Dropdown>
 
 {#if inputs.home.value != "" && inputs.away.value != ""}
 

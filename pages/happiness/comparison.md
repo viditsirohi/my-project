@@ -42,10 +42,10 @@ SELECT * FROM happiness_score.hsArchive WHERE country = '${inputs.away.value}'
 ## Select two countries to compare their happiness scores
 
 <center>
-<Dropdown data={hs2024} name=home value=country order=country defaultValue="Argentina">
+<Dropdown data={hs2024} name=home value=country order=country>
 <DropdownOption valueLabel="Select A Country" value="" />
 </Dropdown>
-<Dropdown data={hs2024} name=away value=country order=country defaultValue="Hungary">
+<Dropdown data={hs2024} name=away value=country order=country>
 <DropdownOption valueLabel="Select A Country" value="" />
 </Dropdown>
 </center>
@@ -109,7 +109,9 @@ yAxisLabels=false
 markers=true
 markerShape=emptyCircle
 labels=true
-/>
+title = {inputs.home.value + " - " + inputs.factor.label}>
+<ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
+</LineChart>
 
 <LineChart
 data={getAwayHistory}
@@ -123,7 +125,9 @@ yAxisLabels=false
 markers=true
 markerShape=emptyCircle
 labels=true
-/>
+title = {inputs.away.value + " - " + inputs.factor.label}>
+<ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
+</LineChart>
 </Grid>
 
 {/if}

@@ -43,8 +43,8 @@ Select a country to begin: <Dropdown data={hs2024} name=country value=country or
 
 <center>
 <BigValue
-data={get_country}
 title={inputs.country.value + " Happiness Score"}
+data={get_country}
 value=score 
 comparison=deltascore
 comparisonFmt=pct1
@@ -52,7 +52,7 @@ comparisonTitle="from 2023"/>
 
 <BigValue
 data={happies_year}
-title={"Happiest year for" + inputs.country.value}
+title={"Happiest year for " + inputs.country.value}
 value=scoreYear
 fmt=yyyy
 />

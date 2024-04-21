@@ -97,9 +97,9 @@ ORDER BY
 
 # Happiness Score Trend
 
-<LineChart 
-data={yearlyAvgTrend} 
-x=year 
+<LineChart
+data={yearlyAvgTrend}
+x=year
 y=avg
 xFmt=yyyy
 yFmt=num3
@@ -110,8 +110,9 @@ markers=true
 markerShape=emptyCircle
 title="Happiness Score Over Time"
 labels=true
-sort=false
-/>
+sort=false>
+<ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
+</LineChart>
 
 <BarChart
 data={regionalcategorycount}
@@ -120,13 +121,16 @@ x=category
 y=count
 title="Regional Composition of Happiness Score Categories"
 swapXY=true
+labels=true
+yGridlines=false
+yAxisLabels=false
 />
 
 ### Select a factor to see its trend against happiness score:
 
 <Grid cols=2>
+<center>
 <Dropdown name=factor>
-<DropdownOption value="" valueLabel="Select a factor"/>
 <DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
 <DropdownOption value="ebSocialSupport" valueLabel="Social Support"/> 
 <DropdownOption value="ebLifeExpectancy" valueLabel="Life Expectancy"/> 
@@ -134,16 +138,17 @@ swapXY=true
 <DropdownOption value="ebGenerosity" valueLabel="Generosity"/> 
 <DropdownOption value="ebCorruption" valueLabel="Corruption"/> 
 </Dropdown>
+</center>
+<center>
 <Dropdown name=factor2>
-<DropdownOption value="" valueLabel="Select a factor"/>
-<DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
 <DropdownOption value="ebSocialSupport" valueLabel="Social Support"/> 
+<DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
 <DropdownOption value="ebLifeExpectancy" valueLabel="Life Expectancy"/> 
 <DropdownOption value="ebFreedomOfLifeChoices" valueLabel="Freedom Of Life Choices"/> 
 <DropdownOption value="ebGenerosity" valueLabel="Generosity"/> 
 <DropdownOption value="ebCorruption" valueLabel="Corruption"/> 
 </Dropdown>
-
+</center>
 </Grid>
 
 {#if inputs.factor.value != "" }
@@ -153,7 +158,7 @@ data={hs2024}
 y={inputs.factor.value}
 x=score
 xAxisTitle="Happiness Score"
-yAxisTitle="Factor"
+yAxisTitle={inputs.factor.label}
 />
 
 {#if inputs.factor2.value != "" }
@@ -162,9 +167,47 @@ data={hs2024}
 y={inputs.factor2.value}
 x=score
 xAxisTitle="Happiness Score"
-yAxisTitle="Factor"
+yAxisTitle={inputs.factor2.label}
 />
 {/if}
 
 </Grid>
+{/if}
+
+### Select two factors to see their correlation:
+
+<Grid cols=2>
+<center>
+<Dropdown name=factor3>
+<DropdownOption value="" valueLabel="Select a factor"/>
+<DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
+<DropdownOption value="ebSocialSupport" valueLabel="Social Support"/> 
+<DropdownOption value="ebLifeExpectancy" valueLabel="Life Expectancy"/> 
+<DropdownOption value="ebFreedomOfLifeChoices" valueLabel="Freedom Of Life Choices"/> 
+<DropdownOption value="ebGenerosity" valueLabel="Generosity"/> 
+<DropdownOption value="ebCorruption" valueLabel="Corruption"/> 
+</Dropdown>
+</center>
+<center>
+<Dropdown name=factor4>
+<DropdownOption value="" valueLabel="Select a factor"/>
+<DropdownOption value="ebGDP" valueLabel="GDP per capita"/> 
+<DropdownOption value="ebSocialSupport" valueLabel="Social Support"/> 
+<DropdownOption value="ebLifeExpectancy" valueLabel="Life Expectancy"/> 
+<DropdownOption value="ebFreedomOfLifeChoices" valueLabel="Freedom Of Life Choices"/> 
+<DropdownOption value="ebGenerosity" valueLabel="Generosity"/> 
+<DropdownOption value="ebCorruption" valueLabel="Corruption"/> 
+</Dropdown>
+</center>
+</Grid>
+
+{#if inputs.factor3.value != "" && inputs.factor4.value != ""}
+<ScatterPlot
+data={hs2024}
+y={inputs.factor3.value}
+x={inputs.factor4.value}
+xAxisTitle={inputs.factor4.label}
+yAxisTitle={inputs.factor3.label}
+/>
+
 {/if}

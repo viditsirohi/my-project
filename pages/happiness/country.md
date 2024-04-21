@@ -2,6 +2,7 @@
 queries:
   - hs_archive: happiness/hsArchive.sql
   - hs2024: happiness/hs2024.sql
+  - regional: happiness/getRegionCategory.sql
 ---
 
 ```sql hs_archive_country

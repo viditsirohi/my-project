@@ -31,6 +31,14 @@ ON     a.country = b.country
 WHERE  a.country IN ('${inputs.home.value}','${inputs.away.value}') AND year(b.scoreyear)=2023
 ```
 
+```sql getHomeHistory
+SELECT * FROM happiness_score.hsArchive WHERE country = '${inputs.home.value}'
+```
+
+```sql getAwayHistory
+SELECT * FROM happiness_score.hsArchive WHERE country = '${inputs.away.value}'
+```
+
 ## Select two countries to compare their happiness scores
 
 <center>
@@ -76,5 +84,46 @@ yGridlines=false
 yAxisLabels=false
 yMin=0
 />
+
+<center>
+<Dropdown name=factor>
+<DropdownOption value="gdpPerCapita" valueLabel="GDP per capita"/>
+<DropdownOption value="socialSupport" valueLabel="Social Support"/>
+<DropdownOption value="healtyLifeExpectancyAtBirth" valueLabel="Life Expectancy"/>
+<DropdownOption value="freedomToMakeLifeChoices" valueLabel="Freedom Of Life Choices"/>
+<DropdownOption value="generosity" valueLabel="Generosity"/>
+<DropdownOption value="perceptionsOfCurrotpion" valueLabel="Corruption"/>
+</Dropdown>
+</center>
+<Grid cols=2>
+
+<LineChart
+data={getHomeHistory}
+x=scoreYear
+xFmt=yyyy
+y={inputs.factor.value}
+yFmt=num2
+yScale=true
+yGridlines=false
+yAxisLabels=false
+markers=true
+markerShape=emptyCircle
+labels=true
+/>
+
+<LineChart
+data={getAwayHistory}
+x=scoreYear
+xFmt=yyyy
+y={inputs.factor.value}
+yFmt=num2
+yScale=true
+yGridlines=false
+yAxisLabels=false
+markers=true
+markerShape=emptyCircle
+labels=true
+/>
+</Grid>
 
 {/if}

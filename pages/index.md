@@ -1,4 +1,6 @@
-# Variable Definitions
+# World Happiness Report 2024
+
+## Variable Definitions
 
 ---
 

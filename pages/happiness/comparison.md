@@ -7,36 +7,42 @@ queries:
 ```sql getComparison
 SELECT country,
        score,
-       ebGDP                  AS "GDP",
-       ebSocialSupport        AS "Social Support",
-       ebLifeExpectancy       AS "Life Expectancy",
-       ebFreedomOfLifeChoices AS "Freedom Of Life Choices",
-       ebGenerosity           AS "Generosity",
-        ebCorruption           AS "Corruption",
-        dystopiaResidual       AS "Dystopia Residual"
+       ebgdp                  AS "GDP",
+       ebsocialsupport        AS "Social Support",
+       eblifeexpectancy       AS "Life Expectancy",
+       ebfreedomoflifechoices AS "Freedom Of Life Choices",
+       ebgenerosity           AS "Generosity",
+       ebcorruption           AS "Corruption",
+       dystopiaresidual       AS "Dystopia Residual"
 FROM   ${hs2024}
-WHERE  country IN ('${inputs.home.value}','${inputs.away.value}')
+WHERE  country IN ('${inputs.home.value}',
+                   '${inputs.away.value}')
 ```
 
 ```sql getHistory
 SELECT a.country,
        a.score,
        CASE
-                    WHEN b.score IS NULL THEN 0
-                    ELSE ((a.score - b.score) / b.score)
+         WHEN b.score IS NULL THEN 0
+         ELSE ( ( a.score - b.score ) / b.score )
        END AS change
 FROM   happiness_score.hs2024 a
-LEFT JOIN   happiness_score.hsArchive b
-ON     a.country = b.country
-WHERE  a.country IN ('${inputs.home.value}','${inputs.away.value}') AND year(b.scoreyear)=2023
+       LEFT JOIN happiness_score.hsarchive b
+              ON a.country = b.country
+WHERE  a.country IN ( '${inputs.home.value}', '${inputs.away.value}' )
+       AND Year(b.scoreyear) = 2023
 ```
 
 ```sql getHomeHistory
-SELECT * FROM happiness_score.hsArchive WHERE country = '${inputs.home.value}'
+SELECT *
+FROM   happiness_score.hsarchive
+WHERE  country = '${inputs.home.value}' 
 ```
 
 ```sql getAwayHistory
-SELECT * FROM happiness_score.hsArchive WHERE country = '${inputs.away.value}'
+SELECT *
+FROM   happiness_score.hsarchive
+WHERE  country = '${inputs.away.value}' 
 ```
 
 ## Select two countries to compare their happiness scores

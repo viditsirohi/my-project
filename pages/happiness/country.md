@@ -6,7 +6,9 @@ queries:
 ---
 
 ```sql hs_archive_country
-SELECT * FROM ${hs_archive} WHERE country = '${inputs.country.value}'
+SELECT *
+FROM   ${hs_archive}
+WHERE  country = '${inputs.country.value}'
 ```
 
 ```SQL get_country
@@ -32,7 +34,15 @@ AND       b.country IN ('${inputs.country.value}')
 ```
 
 ```sql happiness_year
-SELECT scoreYear from ${hs_archive} WHERE country='${inputs.country.value}' AND score = (SELECT MAX(score) FROM ${hs_archive} WHERE country='${inputs.country.value}')
+SELECT scoreyear
+FROM   ${hs_archive}
+WHERE  country='${inputs.country.value}'
+AND    score =
+       (
+        SELECT max(score)
+        FROM   ${hs_archive}
+        WHERE  country='${inputs.country.value}'
+       )
 ```
 
 # Coutnry-wise happiness

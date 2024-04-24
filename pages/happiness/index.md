@@ -6,45 +6,40 @@ queries:
 ---
 
 ```sql regionalcategorycount
-SELECT region, category, COUNT(*) as count FROM ${regional} GROUP BY category, region
+SELECT   region,
+         category,
+         Count(*) AS count
+FROM     ${regional}
+GROUP BY category,
+         region
 ```
 
 ```sql top3
-SELECT
-    a.country,
-    ROUND(a.score, 2) AS score,
-    CASE
-        WHEN b.score <> 0 THEN ((a.score - b.score) * 1.0 / b.score)
-        ELSE NULL
-    END AS deltascore
-FROM
-    ${hs2024} a
-JOIN
-    ${hs_archive} b
-ON
-    a.country = b.country AND YEAR(b.scoreYear) = 2023
-ORDER BY
-    a.score DESC
-LIMIT 3
+SELECT   a.country,
+         Round(a.score, 2) AS score,
+         CASE
+                  WHEN b.score <> 0 THEN ((a.score - b.score) * 1.0 / b.score)
+                  ELSE NULL
+         END AS deltascore
+FROM     ${hs2024} a
+JOIN     ${hs_archive} b
+ON       a.country = b.country
+AND      year(b.scoreyear) = 2023
+ORDER BY a.score DESC limit 3
 ```
 
 ```sql bottom3
-SELECT
-    a.country,
-    ROUND(a.score, 2) AS score,
-    CASE
-        WHEN b.score <> 0 THEN ((a.score - b.score) * 1.0 / b.score)
-        ELSE NULL
-    END AS deltascore
-FROM
-    ${hs2024} a
-JOIN
-    ${hs_archive} b
-ON
-    a.country = b.country AND YEAR(b.scoreYear) = 2023
-ORDER BY
-    a.score
-LIMIT 3
+SELECT   a.country,
+         Round(a.score, 2) AS score,
+         CASE
+                  WHEN b.score <> 0 THEN ((a.score - b.score) * 1.0 / b.score)
+                  ELSE NULL
+         END AS deltascore
+FROM     ${hs2024} a
+JOIN     ${hs_archive} b
+ON       a.country = b.country
+AND      year(b.scoreyear) = 2023
+ORDER BY a.score limit 3
 ```
 
 ```sql avg2024
@@ -56,19 +51,14 @@ FROM
 ```
 
 ```sql yearlyAvgTrend
-SELECT
-    YEAR(scoreYear) AS year,
-    AVG(score) AS avg
-FROM
-    ${hs_archive}
-GROUP BY
-    scoreYear
+SELECT   Year(scoreyear) AS year,
+         Avg(score)      AS avg
+FROM     ${hs_archive}
+GROUP BY scoreyear
 UNION ALL
-SELECT*
-FROM
-    ${avg2024}
-ORDER BY
-    scoreYear
+SELECT  *
+FROM     ${avg2024}
+ORDER BY scoreyear
 ```
 
 # Overview

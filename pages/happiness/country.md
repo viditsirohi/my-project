@@ -45,7 +45,7 @@ AND    score =
        )
 ```
 
-# Coutnry-wise happiness
+# Country-wise happiness
 
 Select a country to begin: <Dropdown data={hs2024} name=country value=country order=country> <DropdownOption valueLabel="Select A Country" value="" /></Dropdown>
 

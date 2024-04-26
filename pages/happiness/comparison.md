@@ -19,7 +19,7 @@ WHERE  country IN ('${inputs.home.value}',
                    '${inputs.away.value}')
 ```
 
-```sql getHistory
+```sql getHomeScore
 SELECT a.country,
        a.score,
        CASE
@@ -29,29 +29,43 @@ SELECT a.country,
 FROM   happiness_score.hs2024 a
        LEFT JOIN happiness_score.hsarchive b
               ON a.country = b.country
-WHERE  a.country IN ( '${inputs.home.value}', '${inputs.away.value}' )
+WHERE  a.country IN ( '${inputs.home.value}')
        AND Year(b.scoreyear) = 2023
 ```
 
-```sql getHomeHistory
-SELECT *
-FROM   happiness_score.hsarchive
-WHERE  country = '${inputs.home.value}' 
+```sql getAwayScore
+SELECT a.country,
+       a.score,
+       CASE
+         WHEN b.score IS NULL THEN 0
+         ELSE ( ( a.score - b.score ) / b.score )
+       END AS change
+FROM   happiness_score.hs2024 a
+       LEFT JOIN happiness_score.hsarchive b
+              ON a.country = b.country
+WHERE  a.country IN ( '${inputs.away.value}')
+       AND Year(b.scoreyear) = 2023
 ```
 
-```sql getAwayHistory
-SELECT *
-FROM   happiness_score.hsarchive
-WHERE  country = '${inputs.away.value}' 
+```sql getHistory
+SELECT a.scoreYear,
+       MAX(CASE WHEN a.country = '${inputs.home.value}' THEN a.${inputs.factor.value} ELSE NULL END) AS '${inputs.home.value}_${inputs.factor.value}',
+       MAX(CASE WHEN b.country = '${inputs.away.value}' THEN b.${inputs.factor.value} ELSE NULL END) AS '${inputs.away.value}_${inputs.factor.value}',
+       MAX(CASE WHEN a.country = '${inputs.home.value}' THEN a.score ELSE NULL END) AS '${inputs.home.value}_score',
+       MAX(CASE WHEN b.country = '${inputs.away.value}' THEN b.score ELSE NULL END) AS '${inputs.away.value}_score'
+FROM   happiness_score.hsarchive a
+       FULL JOIN happiness_score.hsarchive b ON a.scoreYear = b.scoreYear AND b.country = '${inputs.away.value}'
+WHERE  a.country = '${inputs.home.value}'
+GROUP BY a.scoreYear
 ```
 
 ## Select two countries to compare their happiness scores
 
 <center>
-<Dropdown data={hs2024} name=home value=country order=country>
+<Dropdown data={hs2024} name=home value=country order=country defaultValue="India">
 <DropdownOption valueLabel="Select A Country" value="" />
 </Dropdown>
-<Dropdown data={hs2024} name=away value=country order=country>
+<Dropdown data={hs2024} name=away value=country order=country defaultValue="Bangladesh">
 <DropdownOption valueLabel="Select A Country" value="" />
 </Dropdown>
 </center>
@@ -61,7 +75,7 @@ WHERE  country = '${inputs.away.value}'
 <center>
 
 <BigValue
-data={getHistory[0]}
+data={getHomeScore}
 comparisonFmt=pct1
 value=score
 comparison=change
@@ -70,7 +84,7 @@ comparisonTitle="from 2023"
 />
 
 <BigValue
-data={getHistory[1]}
+data={getAwayScore}
 value=score
 title={inputs.away.value + " Happiness Score"}
 comparison=change
@@ -91,6 +105,22 @@ yAxisLabels=false
 yMin=0
 />
 
+<LineChart
+data={getHistory}
+x=scoreYear
+xFmt=yyyy
+y={[inputs.home.value + "_score", inputs.away.value + "_score"]}
+yFmt=num2
+yScale=true
+yGridlines=false
+yAxisTitle=false
+markers=true
+markerShape=emptyCircle>
+<ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
+</LineChart>
+
+### Select a factor to see how it has changed over the years
+
 <center>
 <Dropdown name=factor>
 <DropdownOption value="gdpPerCapita" valueLabel="GDP per capita"/>
@@ -103,34 +133,16 @@ yMin=0
 </center>
 
 <LineChart
-data={getHomeHistory}
+data={getHistory}
 x=scoreYear
 xFmt=yyyy
-y={inputs.factor.value}
+y={[inputs.home.value + "_" + inputs.factor.value, inputs.away.value + "_" + inputs.factor.value]}
 yFmt=num2
 yScale=true
 yGridlines=false
-yAxisLabels=false
+yAxisTitle=false
 markers=true
-markerShape=emptyCircle
-labels=true
-title = {inputs.home.value + " - " + inputs.factor.label}>
-<ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
-</LineChart>
-
-<LineChart
-data={getAwayHistory}
-x=scoreYear
-xFmt=yyyy
-y={inputs.factor.value}
-yFmt=num2
-yScale=true
-yGridlines=false
-yAxisLabels=false
-markers=true
-markerShape=emptyCircle
-labels=true
-title = {inputs.away.value + " - " + inputs.factor.label}>
+markerShape=emptyCircle>
 <ReferenceArea xMin='2020' xMax='2022' label="Covid-19" color=red/>
 </LineChart>
 
